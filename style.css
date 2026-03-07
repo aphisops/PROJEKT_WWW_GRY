@@ -1,0 +1,11 @@
+body {
+    background-color: #282c34; /* Ciemnoszare tło */
+    color: #ffffff;            /* Biały tekst */
+    font-family: Arial, sans-serif;
+    text-align: center;        /* Wyśrodkowanie tekstu */
+    padding-top: 50px;
+}
+
+h1 {
+    color: #61dafb;            /* Jasnoniebieski nagłówek */
+}
