@@ -3,13 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mój pierwszy projekt</title>
-    <link rel="stylesheet" href="style.css">
+    <title>SkyBlock Bazaar Tracker</title>
+    
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h1>elo xd</h1>
-    <p>wbije dzis diamenta w lidze</p>
-    
-    <script src="script.js"></script>
+    <header>
+        <div class="logo">
+            <h1>Bazaar Tracker</h1>
+        </div>
+        <nav>
+            <button id="nav-market" class="active">Rynek</button>
+            <button id="nav-portfolio">Mój Portfel</button>
+        </nav>
+    </header>
+
+    <main>
+        <div id="loader" class="hidden">
+            <p>Pobieranie danych z rynku...</p>
+        </div>
+
+        <div id="error-message" class="hidden error-banner">
+            <p>Wystąpił błąd komunikacji z API. Spróbuj ponownie później.</p>
+        </div>
+
+        <section id="view-market" class="view active-view">
+            <header class="view-header">
+                <h2>Aktualne Ceny</h2>
+                
+                <div class="controls">
+                    <input type="text" id="search-input" placeholder="Szukaj przedmiotu...">
+                    <select id="sort-select">
+                        <option value="name">Sortuj wg nazwy</option>
+                        <option value="margin-desc">Największa marża (Spread)</option>
+                        <option value="price-desc">Najdroższe (Kupno)</option>
+                    </select>
+                </div>
+            </header>
+            
+            <div id="items-grid" class="grid-container">
+                </div>
+            
+            <button id="load-more-btn" class="hidden">Załaduj więcej</button>
+        </section>
+
+        <section id="view-details" class="view hidden">
+            <button id="back-to-market-btn" class="back-btn">← Wróć do rynku</button>
+            
+            <article id="item-details-container">
+                <h2 id="detail-name">Nazwa przedmiotu</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Cena Kupna (Buy)</h3>
+                        <p id="detail-buy">0.0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Cena Sprzedaży (Sell)</h3>
+                        <p id="detail-sell">0.0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Marża (Spread)</h3>
+                        <p id="detail-margin">0.0</p>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section id="view-portfolio" class="view hidden">
+            <h2>Mój Portfel Inwestycyjny</h2>
+            <p>Dodaj przedmioty, aby śledzić ich wartość.</p>
+            
+            <form id="portfolio-form" novalidate>
+                <div class="form-group">
+                    <label for="item-select">Wybierz przedmiot z API:</label>
+                    <select id="item-select" required>
+                        <option value="">-- Wybierz z listy --</option>
+                        </select>
+                    <span class="error-text" id="item-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="item-quantity">Ilość:</label>
+                    <input type="number" id="item-quantity" min="1" placeholder="Np. 64" required>
+                    <span class="error-text" id="quantity-error"></span>
+                </div>
+
+                <button type="submit">Dodaj do portfela</button>
+            </form>
+
+            <div id="portfolio-list">
+                <h3>Twoje zapisane aktywa</h3>
+                <ul id="saved-items-list"></ul>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>

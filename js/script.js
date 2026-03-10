@@ -1,1 +1,0 @@
-console.log("Witaj deweloperze! To jest wiadomość z pliku script.js.");
