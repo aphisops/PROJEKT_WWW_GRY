@@ -1,30 +1,25 @@
-// Import funkcji pobierającej dane
 import { fetchBazaarData } from './api.js';
+import { renderMarketItems } from './ui.js';
 
-// Główna funkcja inicjalizująca aplikację
 async function initApp() {
-    console.log("Czekam na dane z Hypixela....");
+    console.log("Pobieranie danych z API....");
     
-    // Wywołujemy pobieranie danych i czekamy na wynik
+    // Pobieramy dane
     const bazaarData = await fetchBazaarData();
     
-    // Sprawdzamy, czy dane wróciły i czy API potwierdza sukces
     if (bazaarData && bazaarData.success) {
-        console.log("Sukces! Pobrano dane z Bazaaru.");
+        // zamiana danych na tablice
+        const itemsArray = Object.values(bazaarData.products);
         
-        // Dane o przedmiotach są ukryte w obiekcie 'products'
-        console.log("Lista przedmiotów:", bazaarData.products);
+        const first20Items = itemsArray.slice(0, 20);
         
-        // Podejrzyjmy szczegóły jednego konkretnego przedmiotu, np. diamentu
-        if (bazaarData.products.DIAMOND) {
-            console.log("Szczegóły Diamentu:", bazaarData.products.DIAMOND);
-        }
+        // pierwsze 20 itemow
+        renderMarketItems(first20Items);
         
+        console.log("Wyrenderowano przedmioty!");
     } else {
-        console.error("Nie udało się załadować danych do aplikacji.");
-        // W przyszłości tutaj pokażemy użytkownikowi czerwony pasek z błędem z index.html
+        console.error("Błąd ładowania danych.");
     }
 }
 
-// Uruchamiamy initApp dopiero, gdy cała struktura HTML zostanie załadowana
 document.addEventListener('DOMContentLoaded', initApp);
