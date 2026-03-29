@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkyBlock Bazaar Tracker</title>
-    
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -27,10 +26,10 @@
             <p>Wystąpił błąd komunikacji z API. Spróbuj ponownie później.</p>
         </div>
 
+        <!-- WIDOK 1: Rynek -->
         <section id="view-market" class="view active-view">
             <header class="view-header">
                 <h2>Aktualne Ceny</h2>
-                
                 <div class="controls">
                     <input type="text" id="search-input" placeholder="Szukaj przedmiotu...">
                     <select id="sort-select">
@@ -40,16 +39,16 @@
                     </select>
                 </div>
             </header>
-            
-            <div id="items-grid" class="grid-container">
-                </div>
-            
-            <button id="load-more-btn" class="hidden">Załaduj więcej</button>
+
+            <div id="items-grid" class="grid-container"></div>
+
+            <button id="load-more-btn" class="hidden load-more-btn">Załaduj więcej</button>
         </section>
 
+        <!-- WIDOK 2: Szczegóły przedmiotu -->
         <section id="view-details" class="view hidden">
             <button id="back-to-market-btn" class="back-btn">← Wróć do rynku</button>
-            
+
             <article id="item-details-container">
                 <h2 id="detail-name">Nazwa przedmiotu</h2>
                 <div class="stats-grid">
@@ -69,16 +68,17 @@
             </article>
         </section>
 
+        <!-- WIDOK 3: Portfel -->
         <section id="view-portfolio" class="view hidden">
             <h2>Mój Portfel Inwestycyjny</h2>
             <p>Dodaj przedmioty, aby śledzić ich wartość.</p>
-            
+
             <form id="portfolio-form" novalidate>
                 <div class="form-group">
                     <label for="item-select">Wybierz przedmiot z API:</label>
                     <select id="item-select" required>
                         <option value="">-- Wybierz z listy --</option>
-                        </select>
+                    </select>
                     <span class="error-text" id="item-error"></span>
                 </div>
 
