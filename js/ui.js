@@ -3,13 +3,16 @@
 // Funkcja pomocnicza: Zamienia "ENCHANTED_DIAMOND" na "Enchanted Diamond"
 export function formatItemName(internalName) {
     return internalName
+        // API uzywa podkreslen, a uzytkownikowi lepiej czyta sie spacje.
         .replace(/_/g, ' ')
         .toLowerCase()
+        // Kazde slowo zaczynamy wielka litera.
         .replace(/\b\w/g, char => char.toUpperCase());
 }
 
 // Funkcja pomocnicza: Formatuje długie liczby z jednym miejscem po przecinku
 export function formatNumber(num) {
+    // Format pl-PL dodaje polskie separatory tysiecy i przecinek dziesietny.
     return Number(num).toLocaleString('pl-PL', { maximumFractionDigits: 1 });
 }
 
@@ -18,6 +21,7 @@ let materialMap = {};
 
 // Setter wywoływany z main.js po pobraniu danych
 export function setMaterialMap(map) {
+    // Zapamietujemy mape materialow, aby inne funkcje mogly dobrac ikonki.
     materialMap = map;
 }
 
@@ -48,6 +52,7 @@ export function getItemIconUrl(itemId) {
     ];
 
     const isBlock = blockMaterials.includes(material);
+    // Tekstury Minecrafta sa w dwoch folderach: block albo item.
     const folder = isBlock ? 'block' : 'item';
 
     return `https://cdn.jsdelivr.net/gh/InventivetalentDev/minecraft-assets@1.16.5/assets/minecraft/textures/${folder}/${material}.png`;
@@ -59,14 +64,17 @@ export function renderMarketItems(items, append = false) {
     if (!gridContainer) return;
 
     if (!append) {
+        // Gdy nie dopisujemy kolejnej strony, czyscimy poprzednie karty.
         gridContainer.innerHTML = '';
     }
 
     items.forEach(item => {
+        // Ceny bierzemy z quick_status; brak danych zastepujemy zerem.
         const buyPrice = item.quick_status?.buyPrice || 0;
         const sellPrice = item.quick_status?.sellPrice || 0;
         const iconUrl = getItemIconUrl(item.product_id);
 
+        // Tworzymy pojedyncza karte przedmiotu.
         const card = document.createElement('div');
         card.className = 'item-card';
         card.innerHTML = `
@@ -92,6 +100,7 @@ export function renderMarketItems(items, append = false) {
 export function renderItemDetails(item) {
     const buyPrice = item.quick_status?.buyPrice || 0;
     const sellPrice = item.quick_status?.sellPrice || 0;
+    // Spread to roznica miedzy cena kupna i sprzedazy.
     const margin = buyPrice - sellPrice;
 
     const nameEl = document.getElementById('detail-name');
@@ -104,6 +113,7 @@ export function renderItemDetails(item) {
     if (sellEl) sellEl.textContent = formatNumber(sellPrice) + ' monet';
     if (marginEl) {
         marginEl.textContent = formatNumber(margin) + ' monet';
+        // Dodatni spread pokazujemy na zielono, pozostale wartosci na czerwono.
         marginEl.style.color = margin > 0 ? '#55ff55' : '#ff5555';
     }
 }
@@ -121,6 +131,7 @@ export function renderPortfolio(enrichedPortfolio, onRemove) {
     let totalValue = 0;
 
     list.innerHTML = enrichedPortfolio.map(entry => {
+        // Wartoscia wpisu jest liczba sztuk pomnozona przez aktualna cene sprzedazy.
         const value = entry.sellPrice * entry.quantity;
         totalValue += value;
         return `
@@ -138,6 +149,7 @@ export function renderPortfolio(enrichedPortfolio, onRemove) {
 
     const existing = document.getElementById('portfolio-total');
     if (existing) existing.remove();
+    // Po wyrenderowaniu pozycji dodajemy osobny wiersz z suma portfela.
     const summary = document.createElement('li');
     summary.id = 'portfolio-total';
     summary.className = 'portfolio-total';
@@ -145,6 +157,7 @@ export function renderPortfolio(enrichedPortfolio, onRemove) {
     list.appendChild(summary);
 
     list.querySelectorAll('.remove-btn').forEach(btn => {
+        // Kazdy przycisk usuwa przedmiot o ID zapisanym w data-id.
         btn.addEventListener('click', () => onRemove(btn.dataset.id));
     });
 }

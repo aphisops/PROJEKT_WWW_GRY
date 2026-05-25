@@ -10,10 +10,12 @@ const ITEMS_API_URL = 'https://api.hypixel.net/v2/resources/skyblock/items';
  */
 export async function fetchBazaarData() {
     try {
+        // Wysylamy zapytanie do API z aktualnymi cenami.
         const response = await fetch(BAZAAR_API_URL);
         if (!response.ok) {
             throw new Error(`Błąd HTTP: ${response.status}`);
         }
+        // Zamieniamy odpowiedz JSON na zwykly obiekt JavaScript.
         const data = await response.json();
         return data;
     } catch (error) {
@@ -28,6 +30,7 @@ export async function fetchBazaarData() {
  */
 export async function fetchItemMaterials() {
     try {
+        // Ten endpoint sluzy tylko do pobrania informacji o ikonach/materialach.
         const response = await fetch(ITEMS_API_URL);
         if (!response.ok) {
             throw new Error(`Błąd HTTP: ${response.status}`);
@@ -38,6 +41,7 @@ export async function fetchItemMaterials() {
         const materialMap = {};
         if (data.items) {
             data.items.forEach(item => {
+                // Pomijamy rekordy bez ID albo bez materialu.
                 if (item.id && item.material) {
                     materialMap[item.id] = item.material.toLowerCase();
                 }

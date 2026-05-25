@@ -10,12 +10,14 @@ const PAGE_SIZE = 20;      // Ile kart na raz
 
 // HELPERS: WIDOKI
 function showView(viewId) {
+    // Najpierw ukrywamy wszystkie widoki.
     document.querySelectorAll('.view').forEach(v => {
         v.classList.add('hidden');
         v.classList.remove('active-view');
     });
     const target = document.getElementById(viewId);
     if (target) {
+        // Potem pokazujemy tylko ten widok, ktory zostal wybrany.
         target.classList.remove('hidden');
         target.classList.add('active-view');
     }
@@ -23,6 +25,7 @@ function showView(viewId) {
 
 function showLoader(show) {
     const loader = document.getElementById('loader');
+    // toggle dodaje klase, gdy drugi argument to true, albo usuwa, gdy false.
     if (loader) loader.classList.toggle('hidden', !show);
 }
 
@@ -33,6 +36,7 @@ function showError(show) {
 
 // RYNEK: FILTROWANIE, SORTOWANIE, PAGINACJA
 function applyFiltersAndSort() {
+    // Pobieramy aktualny tekst z wyszukiwarki i wybrany typ sortowania.
     const query = document.getElementById('search-input')?.value.toLowerCase() || '';
     const sortBy = document.getElementById('sort-select')?.value || 'name';
 
@@ -43,6 +47,7 @@ function applyFiltersAndSort() {
 
     // Sortowanie
     filteredItems.sort((a, b) => {
+        // Jesli API nie zwroci ceny, traktujemy ja jako 0.
         const aBuy = a.quick_status?.buyPrice || 0;
         const bBuy = b.quick_status?.buyPrice || 0;
         const aMargin = (a.quick_status?.buyPrice || 0) - (a.quick_status?.sellPrice || 0);
@@ -60,6 +65,7 @@ function applyFiltersAndSort() {
 }
 
 function loadMoreItems() {
+    // Obliczamy zakres elementow dla aktualnej strony.
     const start = currentPage * PAGE_SIZE;
     const end = start + PAGE_SIZE;
     const batch = filteredItems.slice(start, end);
@@ -77,22 +83,28 @@ function loadMoreItems() {
 // PORTFEL: ZAPIS W LOCALSTORAGE
 function getPortfolio() {
     try {
+        // localStorage przechowuje tekst, dlatego odczytujemy go przez JSON.parse.
         return JSON.parse(localStorage.getItem('bazaar_portfolio')) || [];
     } catch {
+        // Jesli zapis w przegladarce jest uszkodzony, zaczynamy od pustego portfela.
         return [];
     }
 }
 
 function savePortfolio(portfolio) {
+    // JSON.stringify zamienia tablice portfela na tekst do zapisania.
     localStorage.setItem('bazaar_portfolio', JSON.stringify(portfolio));
 }
 
 function addToPortfolio(productId, quantity) {
     const portfolio = getPortfolio();
+    // Szukamy, czy taki przedmiot jest juz zapisany.
     const existing = portfolio.find(p => p.productId === productId);
     if (existing) {
+        // Jesli jest, zwiekszamy tylko ilosc.
         existing.quantity += quantity;
     } else {
+        // Jesli nie ma, dodajemy nowy wpis.
         portfolio.push({ productId, quantity });
     }
     savePortfolio(portfolio);
@@ -106,6 +118,7 @@ function removeFromPortfolio(productId) {
 
 function refreshPortfolioView() {
     const portfolio = getPortfolio();
+    // Laczymy zapisane ilosci z aktualnymi cenami pobranymi z API.
     const enriched = portfolio.map(entry => {
         const item = allItems.find(i => i.product_id === entry.productId);
         return {
@@ -160,10 +173,12 @@ async function initApp() {
     showLoader(false);
 
     if (!bazaarData || !bazaarData.success) {
+        // Bez danych z bazaaru nie da sie zbudowac glownego widoku.
         showError(true);
         return;
     }
 
+    // API zwraca obiekt produktow, a aplikacji wygodniej pracowac na tablicy.
     allItems = Object.values(bazaarData.products);
 
     // Wypełnienie selecta w portfelu
@@ -200,8 +215,10 @@ async function initApp() {
 
     // Delegacja zdarzeń dla przycisków "Zobacz szczegóły"
     document.getElementById('items-grid')?.addEventListener('click', (e) => {
+        // closest pozwala kliknac np. tekst w przycisku, a i tak znalezc przycisk.
         const btn = e.target.closest('.details-btn');
         if (!btn) return;
+        // data-id przechowuje ID produktu przypisane do kliknietej karty.
         const productId = btn.dataset.id;
         const item = allItems.find(i => i.product_id === productId);
         if (item) {
@@ -216,6 +233,7 @@ async function initApp() {
 
     // EVENTY: PORTFEL (FORMULARZ)
     document.getElementById('portfolio-form')?.addEventListener('submit', (e) => {
+        // Zatrzymujemy standardowe wyslanie formularza i przeladowanie strony.
         e.preventDefault();
         if (!validatePortfolioForm()) return;
 
