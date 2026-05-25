@@ -53,9 +53,7 @@ export function getItemIconUrl(itemId) {
     return `https://cdn.jsdelivr.net/gh/InventivetalentDev/minecraft-assets@1.16.5/assets/minecraft/textures/${folder}/${material}.png`;
 }
 
-// ==========================================
 // WIDOK RYNKU: renderowanie kart
-// ==========================================
 export function renderMarketItems(items, append = false) {
     const gridContainer = document.getElementById('items-grid');
     if (!gridContainer) return;
@@ -89,9 +87,8 @@ export function renderMarketItems(items, append = false) {
     });
 }
 
-// ==========================================
+
 // WIDOK SZCZEGÓŁÓW
-// ==========================================
 export function renderItemDetails(item) {
     const buyPrice = item.quick_status?.buyPrice || 0;
     const sellPrice = item.quick_status?.sellPrice || 0;
@@ -111,9 +108,7 @@ export function renderItemDetails(item) {
     }
 }
 
-// ==========================================
 // WIDOK PORTFELA
-// ==========================================
 export function renderPortfolio(enrichedPortfolio, onRemove) {
     const list = document.getElementById('saved-items-list');
     if (!list) return;

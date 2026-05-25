@@ -2,17 +2,13 @@
 import { fetchBazaarData, fetchItemMaterials } from './api.js';
 import { renderMarketItems, renderItemDetails, renderPortfolio, formatItemName, setMaterialMap } from './ui.js';
 
-// ==========================================
 // STAN APLIKACJI
-// ==========================================
 let allItems = [];         // Wszystkie pobrane przedmioty
 let filteredItems = [];    // Po filtrowaniu/sortowaniu
 let currentPage = 0;       // Aktualna strona paginacji
 const PAGE_SIZE = 20;      // Ile kart na raz
 
-// ==========================================
 // HELPERS: WIDOKI
-// ==========================================
 function showView(viewId) {
     document.querySelectorAll('.view').forEach(v => {
         v.classList.add('hidden');
@@ -35,9 +31,7 @@ function showError(show) {
     if (err) err.classList.toggle('hidden', !show);
 }
 
-// ==========================================
 // RYNEK: FILTROWANIE, SORTOWANIE, PAGINACJA
-// ==========================================
 function applyFiltersAndSort() {
     const query = document.getElementById('search-input')?.value.toLowerCase() || '';
     const sortBy = document.getElementById('sort-select')?.value || 'name';
@@ -80,9 +74,7 @@ function loadMoreItems() {
     }
 }
 
-// ==========================================
 // PORTFEL: ZAPIS W LOCALSTORAGE
-// ==========================================
 function getPortfolio() {
     try {
         return JSON.parse(localStorage.getItem('bazaar_portfolio')) || [];
@@ -125,9 +117,7 @@ function refreshPortfolioView() {
     renderPortfolio(enriched, removeFromPortfolio);
 }
 
-// ==========================================
 // WALIDACJA FORMULARZA PORTFELA
-// ==========================================
 function validatePortfolioForm() {
     let valid = true;
 
@@ -153,9 +143,7 @@ function validatePortfolioForm() {
     return valid;
 }
 
-// ==========================================
 // INICJALIZACJA APLIKACJI
-// ==========================================
 async function initApp() {
     showLoader(true);
     showError(false);
@@ -191,9 +179,7 @@ async function initApp() {
 
     applyFiltersAndSort();
 
-    // ==========================================
     // EVENTY: NAWIGACJA
-    // ==========================================
     document.getElementById('nav-market')?.addEventListener('click', () => {
         document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
         document.getElementById('nav-market').classList.add('active');
@@ -207,9 +193,7 @@ async function initApp() {
         showView('view-portfolio');
     });
 
-    // ==========================================
     // EVENTY: RYNEK
-    // ==========================================
     document.getElementById('search-input')?.addEventListener('input', applyFiltersAndSort);
     document.getElementById('sort-select')?.addEventListener('change', applyFiltersAndSort);
     document.getElementById('load-more-btn')?.addEventListener('click', loadMoreItems);
@@ -230,9 +214,7 @@ async function initApp() {
         showView('view-market');
     });
 
-    // ==========================================
     // EVENTY: PORTFEL (FORMULARZ)
-    // ==========================================
     document.getElementById('portfolio-form')?.addEventListener('submit', (e) => {
         e.preventDefault();
         if (!validatePortfolioForm()) return;

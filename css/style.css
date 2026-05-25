@@ -1,6 +1,4 @@
-/* ========================================== */
 /* BAZA I RESET                               */
-/* ========================================== */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #1e1e24;
@@ -13,9 +11,7 @@ body {
     display: none !important;
 }
 
-/* ========================================== */
 /* NAWIGACJA                                  */
-/* ========================================== */
 header {
     background-color: #2c313c;
     padding: 15px 30px;
@@ -49,9 +45,7 @@ nav button:hover, nav button.active {
     color: #1e1e24;
 }
 
-/* ========================================== */
 /* LOADER I BANER BŁĘDU                       */
-/* ========================================== */
 #loader {
     text-align: center;
     padding: 40px;
@@ -68,9 +62,7 @@ nav button:hover, nav button.active {
     color: #ff9999;
 }
 
-/* ========================================== */
 /* GŁÓWNA ZAWARTOŚĆ                           */
-/* ========================================== */
 main {
     padding: 20px 30px;
     max-width: 1200px;
@@ -95,9 +87,7 @@ main {
     margin-left: 10px;
 }
 
-/* ========================================== */
 /* SIATKA KART (Rynek)                        */
-/* ========================================== */
 .grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -139,7 +129,7 @@ main {
 .details-btn {
     width: 100%;
     padding: 10px;
-    margin-top: auto; /* POPRAWKA: przycisk zawsze na dole karty */
+    margin-top: auto; 
     background-color: #61dafb;
     color: #1e1e24;
     border: none;
@@ -153,7 +143,7 @@ main {
     background-color: #4fa8c7;
 }
 
-/* POPRAWKA: styl przycisku "Załaduj więcej" - wcześniej brakowało */
+/* styl przycisku "Załaduj więcej"  */
 .load-more-btn {
     display: block;
     margin: 30px auto 10px;
@@ -173,9 +163,7 @@ main {
     color: #1e1e24;
 }
 
-/* ========================================== */
 /* WIDOK SZCZEGÓŁÓW                           */
-/* ========================================== */
 .back-btn {
     background: none;
     border: 1px solid #61dafb;
@@ -193,7 +181,6 @@ main {
     color: #1e1e24;
 }
 
-/* POPRAWKA: stats-grid brakowało stylów - karty statystyk nie wyglądały poprawnie */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -224,9 +211,7 @@ main {
     margin: 0;
 }
 
-/* ========================================== */
 /* PORTFEL                                    */
-/* ========================================== */
 #portfolio-form {
     background-color: #2c313c;
     padding: 20px;
@@ -258,7 +243,6 @@ main {
     box-sizing: border-box;
 }
 
-/* POPRAWKA: styl dla komunikatów walidacji - wcześniej brakowało */
 .error-text {
     display: block;
     color: #ff5555;
@@ -283,7 +267,6 @@ main {
     background-color: #4fa8c7;
 }
 
-/* POPRAWKA: style listy portfela - wcześniej brakowało */
 #saved-items-list {
     list-style: none;
     padding: 0;
@@ -354,9 +337,7 @@ main {
     padding: 10px 0;
 }
 
-/* ========================================== */
-/* RESPONSYWNOŚĆ (Mobile-first)               */
-/* ========================================== */
+/* RESPONSYWNOŚĆ  */
 @media (max-width: 600px) {
     header {
         flex-direction: column;
