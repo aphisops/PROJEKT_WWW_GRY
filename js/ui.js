@@ -13,38 +13,48 @@ export function formatNumber(num) {
     return Number(num).toLocaleString('pl-PL', { maximumFractionDigits: 1 });
 }
 
-// Słownik tłumaczący ID Hypixela na ścieżki tekstur Minecrafta 1.16
-const iconMap = {
-    'DIAMOND': 'item/diamond',
-    'EMERALD': 'item/emerald',
-    'GOLD_INGOT': 'item/gold_ingot',
-    'IRON_INGOT': 'item/iron_ingot',
-    'WHEAT': 'item/wheat',
-    'CARROT_ITEM': 'item/carrot',
-    'POTATO_ITEM': 'item/potato',
-    'PORK': 'item/porkchop',
-    'CORRUPTED_BAIT': 'item/phantom_membrane',
-    'ENCHANTED_DIAMOND': 'item/diamond',
-    'COBBLESTONE': 'block/cobblestone',
-    'OBSIDIAN': 'block/obsidian',
-    'COAL_BLOCK': 'block/coal_block',
-    'TARANTULA_WEB': 'block/cobweb',
-    'CACTUS': 'block/cactus'
-};
+// Globalna mapa materiałów pobrana z Hypixel Items API
+let materialMap = {};
 
-// Pobiera link do obrazka dla danego ID przedmiotu
+// Setter wywoływany z main.js po pobraniu danych
+export function setMaterialMap(map) {
+    materialMap = map;
+}
+
+/**
+ * Zwraca URL do ikony przedmiotu.
+ * Używa pola "material" z Hypixel Items API (np. "diamond", "iron_ingot")
+ * i pobiera teksturę z CDN minecraft-assets na GitHubie.
+ * Jeśli brak danych - próbuje zgadnąć na podstawie ID.
+ */
 export function getItemIconUrl(itemId) {
-    let cleanId = itemId.replace('ENCHANTED_', '');
-    let assetPath = iconMap[cleanId] || iconMap[itemId];
-    if (!assetPath) {
-        assetPath = `item/${cleanId.toLowerCase()}`;
+    // 1. Pobieramy materiał z mapy (np. "diamond", "iron_ingot", "cobblestone")
+    let material = materialMap[itemId];
+
+    // 2. Jeśli nie ma w mapie, próbujemy zgadnąć usuwając ENCHANTED_ i lowercase
+    if (!material) {
+        material = itemId.replace(/^ENCHANTED_/, '').toLowerCase();
     }
-    return `https://cdn.jsdelivr.net/gh/InventivetalentDev/minecraft-assets@1.16.5/assets/minecraft/textures/${assetPath}.png`;
+
+    // 3. Sprawdzamy czy to blok czy item na podstawie nazwy
+    const blockMaterials = [
+        'cobblestone', 'obsidian', 'coal_block', 'iron_block', 'gold_block',
+        'diamond_block', 'emerald_block', 'redstone_block', 'lapis_block',
+        'quartz_block', 'sandstone', 'dirt', 'gravel', 'sand', 'netherrack',
+        'soul_sand', 'glowstone', 'sea_lantern', 'sponge', 'cactus',
+        'melon_block', 'pumpkin', 'hay_block', 'bone_block', 'nether_brick',
+        'end_stone', 'mycelium', 'clay', 'hardened_clay', 'stained_clay',
+        'ice', 'packed_ice', 'snow', 'mossy_cobblestone', 'web', 'cobweb'
+    ];
+
+    const isBlock = blockMaterials.includes(material);
+    const folder = isBlock ? 'block' : 'item';
+
+    return `https://cdn.jsdelivr.net/gh/InventivetalentDev/minecraft-assets@1.16.5/assets/minecraft/textures/${folder}/${material}.png`;
 }
 
 // ==========================================
 // WIDOK RYNKU: renderowanie kart
-// POPRAWKA: parametr append pozwala dołączać karty (paginacja)
 // ==========================================
 export function renderMarketItems(items, append = false) {
     const gridContainer = document.getElementById('items-grid');
@@ -80,8 +90,7 @@ export function renderMarketItems(items, append = false) {
 }
 
 // ==========================================
-// WIDOK SZCZEGÓŁÓW: wypełnienie danych
-// POPRAWKA: brakowało tej funkcji - widok szczegółów nigdy się nie wypełniał
+// WIDOK SZCZEGÓŁÓW
 // ==========================================
 export function renderItemDetails(item) {
     const buyPrice = item.quick_status?.buyPrice || 0;
@@ -103,8 +112,7 @@ export function renderItemDetails(item) {
 }
 
 // ==========================================
-// WIDOK PORTFELA: renderowanie listy aktywów
-// POPRAWKA: brakowało tej funkcji - portfel nie wyświetlał danych
+// WIDOK PORTFELA
 // ==========================================
 export function renderPortfolio(enrichedPortfolio, onRemove) {
     const list = document.getElementById('saved-items-list');
@@ -133,7 +141,6 @@ export function renderPortfolio(enrichedPortfolio, onRemove) {
         `;
     }).join('');
 
-    // Podsumowanie
     const existing = document.getElementById('portfolio-total');
     if (existing) existing.remove();
     const summary = document.createElement('li');
@@ -142,7 +149,6 @@ export function renderPortfolio(enrichedPortfolio, onRemove) {
     summary.innerHTML = `<strong>Łączna wartość portfela: ${formatNumber(totalValue)} monet</strong>`;
     list.appendChild(summary);
 
-    // Eventy usuwania
     list.querySelectorAll('.remove-btn').forEach(btn => {
         btn.addEventListener('click', () => onRemove(btn.dataset.id));
     });

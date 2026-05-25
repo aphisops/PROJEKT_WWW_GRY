@@ -1,6 +1,6 @@
 // js/main.js
-import { fetchBazaarData } from './api.js';
-import { renderMarketItems, renderItemDetails, renderPortfolio, formatItemName } from './ui.js';
+import { fetchBazaarData, fetchItemMaterials } from './api.js';
+import { renderMarketItems, renderItemDetails, renderPortfolio, formatItemName, setMaterialMap } from './ui.js';
 
 // ==========================================
 // STAN APLIKACJI
@@ -160,7 +160,14 @@ async function initApp() {
     showLoader(true);
     showError(false);
 
-    const bazaarData = await fetchBazaarData();
+    // Pobieramy jednocześnie dane bazaaru i materiały przedmiotów (2 zapytania do API)
+    const [bazaarData, materialMap] = await Promise.all([
+        fetchBazaarData(),
+        fetchItemMaterials()
+    ]);
+
+    // Przekazujemy mapę materiałów do modułu ui.js
+    setMaterialMap(materialMap);
 
     showLoader(false);
 
